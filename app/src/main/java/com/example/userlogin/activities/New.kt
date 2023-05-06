@@ -1,7 +1,8 @@
-package com.example.userlogin
+package com.example.userlogin.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.userlogin.R
 
 class New : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
