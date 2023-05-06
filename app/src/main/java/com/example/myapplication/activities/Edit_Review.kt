@@ -13,19 +13,28 @@ import com.example.myapplication.R
 import com.example.myapplication.model.commentModel
 import com.google.firebase.database.FirebaseDatabase
 
+
 class Edit_Review : AppCompatActivity() {
 
+
+    private lateinit var commentId: TextView
     private lateinit var tvcomment: TextView
     private lateinit var btndelete: Button
     private lateinit var btnupdate: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_review)
 
+        //initilize views
         initView()
+
+        //set Values to the views
         setValuesToView()
 
-        btnupdate.setOnClickListener{
+
+        //set click listener to the update btn
+        btnupdate.setOnClickListener {
             openUpdateDialog(
                 intent.getStringExtra("commentId").toString(),
                 intent.getStringExtra("newComment").toString()
@@ -33,50 +42,61 @@ class Edit_Review : AppCompatActivity() {
             )
         }
 
-        btndelete.setOnClickListener{
+        //set click listener to the delete button
+        btndelete.setOnClickListener {
             deleteRecord(
                 intent.getStringExtra("commentId").toString()
             )
         }
     }
 
-    private fun deleteRecord(
-        id: String
-    ){
-        val dbRef = FirebaseDatabase.getInstance().getReference("comments").child(id)
-        val mTask = dbRef.removeValue()
 
-        mTask.addOnSuccessListener {
-            Toast.makeText(this,"Comment deleted successfully",Toast.LENGTH_LONG).show()
-            val intent = Intent(this,manageReview::class.java)
-            finish()
-            startActivity(intent)
-        }.addOnFailureListener{
-            Toast.makeText(this,"Deleting Error ",Toast.LENGTH_LONG).show()
-        }
-    }
+    private fun initView() {
 
-    private fun initView(){
-        
-        tvcomment=findViewById(R.id.updateComment)
+        //initilize views
+        commentId = findViewById(R.id.commentId)
+        tvcomment = findViewById(R.id.updateComment)
         btnupdate = findViewById(R.id.savebtn)
         btndelete = findViewById(R.id.deletebtn)
 
+
     }
 
-    private fun setValuesToView(){
-
+    //set valus to the views
+    private fun setValuesToView() {
+        commentId.text = intent.getStringExtra("commentId")
         tvcomment.text = intent.getStringExtra("newComment")
 
 
     }
+
+    //delete record from db
+    private fun deleteRecord(
+        id: String
+    ) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("comments").child(id)
+        val mTask = dbRef.removeValue()
+
+        mTask.addOnSuccessListener {
+            Toast.makeText(this, "Comment deleted successfully", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, manageReview::class.java)
+            startActivity(intent) // start the new activity
+            finish() // close the current activity
+        }.addOnFailureListener { error ->
+            Toast.makeText(this, "Failed to delete comment: ${error.message}", Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    //open update dialog
+
     private fun openUpdateDialog(
-        cmtId:String,
-        comment:String
-    ){
+        cmtId: String,
+        comment: String
+    ) {
         val uDialog = AlertDialog.Builder(this)
         val inflater = layoutInflater
-        val uDialogView = inflater.inflate(R.layout.activity_update_dialog,null)
+        val uDialogView = inflater.inflate(R.layout.activity_update_dialog, null)
 
         //intiallize  the button and edittext
 
@@ -86,7 +106,7 @@ class Edit_Review : AppCompatActivity() {
 
         val etCmt = uDialogView.findViewById<EditText>(R.id.editComment)
 
-        //getting the data for update dialogbox
+        //set data for update dialogbox
 
         etCmt.setText(intent.getStringExtra("newComment").toString())
 
@@ -95,14 +115,16 @@ class Edit_Review : AppCompatActivity() {
         val alertDialog = uDialog.create()
         alertDialog.show()
 
+        //set click listener to the save button
         savebtn.setOnClickListener {
             updateCmt(
                 cmtId,
                 etCmt.text.toString()
             )
-        //make toast to inform update is success
+            //make toast to inform update is success
 
-            Toast.makeText(applicationContext, "Comment updated Succefully", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Comment updated Succefully", Toast.LENGTH_LONG)
+                .show()
 
             //update to data to textview
             tvcomment.text = etCmt.text.toString()
@@ -113,9 +135,9 @@ class Edit_Review : AppCompatActivity() {
     }
 
     private fun updateCmt(
-        id:String,
+        id: String,
         comment: String
-    ){
+    ) {
         //update the database
         val dbRef = FirebaseDatabase.getInstance().getReference("comments").child(id)
         val cmtinfo = commentModel(id, comment)

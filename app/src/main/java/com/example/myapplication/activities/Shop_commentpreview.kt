@@ -14,6 +14,7 @@ import com.google.firebase.database.*
 
 class Shop_commentpreview : AppCompatActivity() {
 
+    //declaire variable
     private lateinit var btnAddComment: Button
     private lateinit var cmtRecycleView: RecyclerView
     private lateinit var cmtList: ArrayList<commentModel>
@@ -39,16 +40,17 @@ class Shop_commentpreview : AppCompatActivity() {
         getComments()
 
     }
-    private fun getComments(){
+
+    private fun getComments() {
 
         dbRef = FirebaseDatabase.getInstance().getReference("comments")
 
-        dbRef.addValueEventListener(object : ValueEventListener{
+        dbRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 cmtList.clear()
-                if(snapshot.exists()){
-                    for(cmtSnap in snapshot.children){
-                        val cmtData =  cmtSnap.getValue(commentModel::class.java)
+                if (snapshot.exists()) {
+                    for (cmtSnap in snapshot.children) {
+                        val cmtData = cmtSnap.getValue(commentModel::class.java)
                         cmtList.add(cmtData!!)
                     }
                     val cAdapter = CommentAdapter(cmtList)
