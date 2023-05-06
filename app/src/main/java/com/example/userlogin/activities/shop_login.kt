@@ -18,12 +18,8 @@ class shop_login : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         binding = ActivityShopLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.redirectSignup.setOnClickListener{
@@ -35,11 +31,7 @@ class shop_login : AppCompatActivity() {
 
             val email = binding.addemail.text.toString()
             val Password = binding.addpassword.text.toString()
-
-
             if(email.isNotEmpty() && Password.isNotEmpty() ){
-
-
                     firebaseAuth.signInWithEmailAndPassword(email,Password).addOnCompleteListener {
                         if(it.isSuccessful){
                             val intent = Intent(this , home_page::class.java)

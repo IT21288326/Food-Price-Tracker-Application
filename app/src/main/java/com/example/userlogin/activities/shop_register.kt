@@ -14,13 +14,8 @@ class shop_register : AppCompatActivity() {
 
     private lateinit var binding:ActivityShopRegisterBinding
     private lateinit var firebaseAuth: FirebaseAuth
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
         binding = ActivityShopRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -30,16 +25,11 @@ class shop_register : AppCompatActivity() {
             val intent =  Intent(this, shop_login::class.java)
             startActivity(intent)
         }
-
-
-
         binding.button.setOnClickListener {
 
             val email = binding.addemail.text.toString()
             val Password = binding.addpassword.text.toString()
             val Repassword = binding.rePassword.text.toString()
-
-
             if(email.isNotEmpty() && Password.isNotEmpty() && Repassword.isNotEmpty()){
                 if(Password == Repassword){
 
